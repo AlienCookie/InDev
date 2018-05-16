@@ -1,0 +1,25 @@
+version: "3.2"
+
+services:
+
+  postgres:
+    build:
+      context: ../
+      dockerfile: src/db/Dockerfile
+    ports:
+      - "10001:5432"
+
+  api:
+    build:
+      context: ../
+      dockerfile: src/api/Dockerfile
+    environment:
+      - GP_SERVICE=api
+      - GP_VERSION=local
+      - GP_DATABASE_HOST=postgres
+      - GP_DATABASE_USER=postgres
+      - GP_DATABASE_PASSWORD=postgres
+      - GP_DATABASE_PORT=5432
+      - GP_DATABASE_DB=postgres
+    ports:
+      - "10002:8080"
