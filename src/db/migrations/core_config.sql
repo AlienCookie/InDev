@@ -22,6 +22,10 @@ CREATE TABLE gp (
 
 INSERT INTO gp VALUES (1);
 
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
 --
 -- Name: user; Type: TABLE; Schema: public; Owner: -
 --
@@ -37,7 +41,7 @@ CREATE TABLE "user" (
 );
 
 --
--- Name: user; Type: TABLE; Schema: public; Owner: -
+-- Name: message; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE message (
@@ -49,6 +53,38 @@ CREATE TABLE message (
 );
 
 --
+-- Name: post; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE post (
+    id uuid DEFAULT get_ramndom_uuid() NOT NULL,
+    owner uuid NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    data text NOT NULL
+);
+
+--
+-- Name: "connection"; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE "connection" (
+    id uuid DEFAULT get_ramndom_uuid() NOT NULL,
+    follower uuid NOT NULL,
+    connected_user uuid NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+);
+
+--
+-- Name: chat; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE chat (
+    name string NOT NULL,
+    connected_user uuid NOT NULL,
+    connected_at timestamp with time zone DEFAULT now() NOT NULL,
+);
+
+--
 -- Name: user_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -57,9 +93,17 @@ ALTER TABLE ONLY "user"
 
 
 --
--- Name: user_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: message_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY message
     ADD CONSTRAINT message_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: public; Type: ACL; Schema: -; Owner: -
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
