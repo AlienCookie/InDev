@@ -1,5 +1,5 @@
 version: "3.2"
-
+#@FOR /f "tokens=*" %i IN ('docker-machine env --shell cmd box') DO @%i
 services:
 
   postgres:
@@ -21,5 +21,6 @@ services:
       - GP_DATABASE_PASSWORD=postgres
       - GP_DATABASE_PORT=5432
       - GP_DATABASE_DB=postgres
+      - GP_ACCOUNT_SIGNUP_ENABLED=true
     ports:
       - "10002:8080"
